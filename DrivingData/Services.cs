@@ -7,9 +7,9 @@ using System.Linq;
 namespace DrivingData
 {
     // So this isn't a real web API but if it were these would be service endpoints
-    class Services
+    public static class Services
     {
-        public string GenerateReport(List<Trip> trips)
+        public static string GenerateReport(List<Trip> trips)
         {
             //TODO discard < 5 and > 100
 
@@ -32,7 +32,7 @@ namespace DrivingData
                 // "rounded to the nearest 32-bit signed integer. If value is halfway between two whole numbers, 
                 // the even number is returned; that is, 4.5 is converted to 4, and 5.5 is converted to 6."
                 var miles = Convert.ToInt32(summary.TotalDistance);
-                var mph = Convert.ToInt32(summary.TotalDistance / summary.TotalMinutes));
+                var mph = Convert.ToInt32(summary.TotalDistance / summary.TotalMinutes);
 
                 sb.AppendFormat("{0}: {1} miles @ {2} mph", summary.DriverName, miles, mph);
             }

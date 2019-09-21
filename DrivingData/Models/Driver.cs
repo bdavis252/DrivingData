@@ -1,6 +1,6 @@
 ﻿namespace DrivingData.Models
 {
-    class Driver
+    public class Driver
     {
         public string Name { get; set; }
     }

@@ -2,7 +2,7 @@
 
 namespace DrivingData.Models
 {
-    class DriverTripSummary
+    public class DriverTripSummary
     {
         public string DriverName { get; set; }
         public decimal TotalDistance { get; set; }
