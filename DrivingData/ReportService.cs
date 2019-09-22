@@ -7,19 +7,14 @@ using System.Linq;
 namespace DrivingData
 {
     // So this isn't a real web API but if it were these would be service endpoints
-    public static class Services
+    public class ReportService
     {
-        public static string GenerateReport(List<Trip> trips)
+        public string GenerateReport(List<Trip> trips)
         {
             //TODO discard < 5 and > 100
 
-            //Aggregate everything
-            var driverTripSummaries = trips.GroupBy(t => t.DriverName).Select(g => new DriverTripSummary()
-            {
-                DriverName = g.Key,
-                TotalDistance = g.Sum(t => t.MilesDriven),
-                TotalMinutes = Convert.ToInt32(g.Sum(t => t.EndTime.Subtract(t.StartTime).TotalMinutes)) // convert the sum rather than each item
-            }).OrderByDescending(dts => dts.TotalDistance);
+            //This needs to move to the user data service
+            var driverTripSummaries = { }; 
             
             //Generate Report
             var sb = new StringBuilder();

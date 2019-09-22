@@ -9,6 +9,17 @@ namespace Tests
     [TestClass]
     public class TestSuite1
     {
+        ReportService rs;
+        TextFileService ts;
+        
+        [TestInitialize]
+        public void Init()
+        {
+            //This will work for now but needs DI/IoC
+            rs = new ReportService();
+            ts = new TextFileService();
+        }
+
         [TestMethod]
         public void TestReportWithHardcodedData()
         {
@@ -22,7 +33,7 @@ namespace Tests
                 MilesDriven = 40
             });
 
-            Assert.AreEqual("HumanBeing: 40 miles @ 40 mph", Services.GenerateReport(trips));
+            Assert.AreEqual("HumanBeing: 40 miles @ 40 mph", rs.GenerateReport(trips));
         }
 
         [TestMethod]
@@ -55,14 +66,30 @@ namespace Tests
                 MilesDriven = 42
             });
 
-            var debug = Services.GenerateReport(trips);
-            Assert.AreEqual("Lauren: 42 miles @ 34 mph\nDan: 39 miles @ 47 mph", Services.GenerateReport(trips));
+            var debug = rs.GenerateReport(trips);
+            Assert.AreEqual("Lauren: 42 miles @ 34 mph\r\nDan: 39 miles @ 47 mph", rs.GenerateReport(trips));
         }
 
-        //TODO make a test to handle input for ppl that aren't registered?
-        //TODO make a test to handle junk time/distance inputs
+        [TestMethod]
+        public void TestReadingFileWithSingleDriverCommand()
+        {
 
-        //TODO test input from text files
-        //TODO way later test 24 hr input in text file
+        }
+
+        [TestMethod]
+        public void TestReadingFileWithSingleTripCommand()
+        {
+
+        }
+
+        //TODO test the discard of < 5 or > 100
+
+        //TODO handle the case when there is a driver with no trips (print the 0)
+
+        //TODO what about duplicate driver registrations
+        //TODO make a test to handle input for ppl that aren't registered?
+        //TODO make a test to handle junk time/distance inputs?
+
+        //TODO way later test 24 hr input in text file?
     }
 }

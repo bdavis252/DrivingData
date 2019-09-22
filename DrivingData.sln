@@ -7,6 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DrivingData", "DrivingData\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{4D7AB2AC-85B4-4D64-9E43-115FEC4DDC4B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TextFiles", "TextFiles", "{D35C19FE-C396-4D7A-9C40-5BDF09A4D007}"
+	ProjectSection(SolutionItems) = preProject
+		ExampleFromRoot.txt = ExampleFromRoot.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
