@@ -18,7 +18,7 @@ namespace DrivingData
             AllTrips = new List<Trip>();
         }
 
-        //TODO if not exists
+        //TODO case if driver does not exist
         public void RegisterDriver(string driverName)
         {
             AllRegisteredDrivers.Add(new Driver(driverName));

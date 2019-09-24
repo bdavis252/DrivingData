@@ -3,6 +3,7 @@ using DrivingData.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Tests
 {
@@ -10,7 +11,7 @@ namespace Tests
     public class TestSuite1
     {
         ReportService rs;
-        TextFileService ts;
+        TextFileService tfs;
         UserDataCollectionService udcs;
 
         [TestInitialize]
@@ -20,7 +21,7 @@ namespace Tests
             // As both of the bottom ones depend on the same instance of the top, for now, meh.
             udcs = new UserDataCollectionService();
             rs = new ReportService(udcs);
-            ts = new TextFileService(udcs);
+            tfs = new TextFileService(udcs);
         }
 
         [TestMethod]
@@ -55,9 +56,25 @@ namespace Tests
         }
 
         [TestMethod]
+        public void TestParseSingleDriverCommand()
+        {
+            tfs.ProcessDriverCommand("Driver Dan");
+            Assert.IsTrue(udcs.AllRegisteredDrivers.Exists(x => x.Name == "Dan"));
+        }
+
+        [TestMethod]
+        public void TestParseSingleTripCommand()
+        {
+            udcs.RegisterDriver("Dan");
+            tfs.ProcessTripCommand("Trip Dan 07:15 07:45 17.3");
+            var list = udcs.GetDriverTripSummaries().ToList();
+            Assert.IsTrue(list.Exists(x => x.DriverName == "Dan" && x.TotalDistance == 17.3M && x.TotalMinutes == 30));
+        }
+
+        [TestMethod]
         public void TestReadingFileWithSingleDriverCommand()
         {
-
+            
         }
 
         [TestMethod]
