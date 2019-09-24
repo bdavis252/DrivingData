@@ -12,19 +12,37 @@ namespace DrivingData
     {
         public List<Driver> AllRegisteredDrivers { get; private set; }
         private List<Trip> AllTrips { get; set; }
-
-        public void ProcessDriverCommand() //maybe this could just return the drivers every time for convenience, we'll see
+        public UserDataCollectionService()
         {
-
+            AllRegisteredDrivers = new List<Driver>();
+            AllTrips = new List<Trip>();
         }
 
-        public void ProcessTripCommand()
+        //TODO if not exists
+        public void RegisterDriver(string driverName)
         {
-
+            AllRegisteredDrivers.Add(new Driver(driverName));
+        }
+        public void RegisterDriver(Driver d)
+        {
+            AllRegisteredDrivers.Add(d);
         }
 
-        public IOrderedEnumerable<DriverTripSummary> GetDriverTripSummary()
+        public void RegisterTrip(Driver d, DateTime startTime, DateTime endTime, decimal milesDriven)
         {
+            AllTrips.Add(new Trip()
+            {
+                DriverName = d.Name,
+                StartTime = startTime,
+                EndTime = endTime,
+                MilesDriven = milesDriven
+            });
+        }
+
+        public IOrderedEnumerable<DriverTripSummary> GetDriverTripSummaries()
+        {
+            //TODO discard < 5 and > 100
+
             return AllTrips.GroupBy(t => t.DriverName).Select(g => new DriverTripSummary()
             {
                 DriverName = g.Key,

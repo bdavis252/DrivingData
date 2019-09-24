@@ -6,15 +6,18 @@ namespace DrivingData
     {
         static void Main(string[] args)
         {
+            // This will work for now but really ought to have DI/IoC.
+            // As both of the bottom ones depend on the same instance of the top, for now, meh.
+            var udcs = new UserDataCollectionService();
+            var rs = new ReportService(udcs);
+            var ts = new TextFileService(udcs);
+
             Console.WriteLine("Hello World!");
 
             //if args < 1 abort
             //else use args to get filename
 
-            //feed file name to text service. I think that service should depend on something that will process the user data.
-            //that data should probably get persisted somewhere till this main method calls the report service. 
-            //Probably user service would be fine.
-            //then the report service would say hey user service, give me the most current list of stuff.
+            //feed file name to text service.
             
             Console.ReadLine(); //keep window open until enter pressed to see output
         }

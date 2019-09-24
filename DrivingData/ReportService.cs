@@ -9,12 +9,16 @@ namespace DrivingData
     // So this isn't a real web API but if it were these would be service endpoints
     public class ReportService
     {
-        public string GenerateReport(List<Trip> trips)
-        {
-            //TODO discard < 5 and > 100
+        private UserDataCollectionService udcs;
 
-            //This needs to move to the user data service
-            var driverTripSummaries = { }; 
+        public ReportService(UserDataCollectionService udcs)
+        {
+            this.udcs = udcs;
+        }
+
+        public string GenerateReport()
+        {
+            var driverTripSummaries = udcs.GetDriverTripSummaries(); 
             
             //Generate Report
             var sb = new StringBuilder();
@@ -22,7 +26,8 @@ namespace DrivingData
             foreach (var summary in driverTripSummaries.Select((x, i) => new { Value = x, Index = i }))
             {
                 // Problem specified "to nearest int" so I'm using Convert.ToInt32 because it rounds and converts double to int in one step.
-                // If this were real life, you better believe I'd be asking someone who cared which way to round these. 
+                // If this were real life, you better believe I'd be asking someone who cared which way to round these.
+                // For now, "If the problem statement doesn't specify something, you can make any decision that you want."
                 // Manual says:
                 // "rounded to the nearest 32-bit signed integer. If value is halfway between two whole numbers, 
                 // the even number is returned; that is, 4.5 is converted to 4, and 5.5 is converted to 6."

@@ -11,29 +11,28 @@ namespace Tests
     {
         ReportService rs;
         TextFileService ts;
-        
+        UserDataCollectionService udcs;
+
         [TestInitialize]
         public void Init()
         {
-            //This will work for now but needs DI/IoC
-            rs = new ReportService();
-            ts = new TextFileService();
+            // This will work for now but really ought to have DI/IoC.
+            // As both of the bottom ones depend on the same instance of the top, for now, meh.
+            udcs = new UserDataCollectionService();
+            rs = new ReportService(udcs);
+            ts = new TextFileService(udcs);
         }
 
         [TestMethod]
         public void TestReportWithHardcodedData()
         {
+            var human = new Driver("HumanBeing");
+            udcs.RegisterDriver(human);
+            
             var consistentTime = DateTime.Now;
+            udcs.RegisterTrip(human, consistentTime, consistentTime.AddMinutes(60), 40);
 
-            var trips = new List<Trip>();
-            trips.Add(new Trip() {
-                DriverName = "HumanBeing",
-                StartTime = consistentTime,
-                EndTime = consistentTime.AddMinutes(60),
-                MilesDriven = 40
-            });
-
-            Assert.AreEqual("HumanBeing: 40 miles @ 40 mph", rs.GenerateReport(trips));
+            Assert.AreEqual("HumanBeing: 40 miles @ 40 mph", rs.GenerateReport());
         }
 
         [TestMethod]
@@ -42,32 +41,17 @@ namespace Tests
             // Trip Dan 07:15 07:45 17.3
             // Trip Dan 06:12 06:32 21.8
             // Trip Lauren 12:01 13:16 42.0
-            
-            var trips = new List<Trip>();
-            trips.Add(new Trip()
-            {
-                DriverName = "Dan",
-                StartTime = new DateTime(2019, 1, 1, 7, 15, 0),
-                EndTime = new DateTime(2019, 1, 1, 7, 45, 0),
-                MilesDriven = 17.3M
-            });
-            trips.Add(new Trip()
-            {
-                DriverName = "Dan",
-                StartTime = new DateTime(2019, 1, 1, 6, 12, 0),
-                EndTime = new DateTime(2019, 1, 1, 6, 32, 0),
-                MilesDriven = 21.8M
-            });
-            trips.Add(new Trip()
-            {
-                DriverName = "Lauren",
-                StartTime = new DateTime(2019, 1, 1, 12, 01, 0),
-                EndTime = new DateTime(2019, 1, 1, 13, 16, 0),
-                MilesDriven = 42
-            });
 
-            var debug = rs.GenerateReport(trips);
-            Assert.AreEqual("Lauren: 42 miles @ 34 mph\r\nDan: 39 miles @ 47 mph", rs.GenerateReport(trips));
+            var dan = new Driver("Dan");
+            udcs.RegisterDriver(dan);
+            var lauren = new Driver("Lauren");
+            udcs.RegisterDriver(lauren);
+
+            udcs.RegisterTrip(dan, new DateTime(2019, 1, 1, 7, 15, 0), new DateTime(2019, 1, 1, 7, 45, 0), 17.3M);
+            udcs.RegisterTrip(dan, new DateTime(2019, 1, 1, 6, 12, 0), new DateTime(2019, 1, 1, 6, 32, 0), 21.8M);
+            udcs.RegisterTrip(lauren, new DateTime(2019, 1, 1, 12, 01, 0), new DateTime(2019, 1, 1, 13, 16, 0), 42);
+            
+            Assert.AreEqual("Lauren: 42 miles @ 34 mph\r\nDan: 39 miles @ 47 mph", rs.GenerateReport());
         }
 
         [TestMethod]
