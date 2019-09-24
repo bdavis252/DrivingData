@@ -74,13 +74,16 @@ namespace Tests
         [TestMethod]
         public void TestReadingFileWithSingleDriverCommand()
         {
-            
+            tfs.ReadAndProcessTextFile("ExampleTextFiles/SingleDriver.txt");
+            Assert.IsTrue(udcs.AllRegisteredDrivers.Exists(x => x.Name == "Dan"));
         }
 
         [TestMethod]
         public void TestReadingFileWithSingleTripCommand()
         {
-
+            tfs.ReadAndProcessTextFile("ExampleTextFiles/SingleTrip.txt");
+            var list = udcs.GetDriverTripSummaries().ToList();
+            Assert.IsTrue(list.Exists(x => x.DriverName == "Dan" && x.TotalDistance == 17.3M && x.TotalMinutes == 30));
         }
 
         //TODO test the discard of < 5 or > 100

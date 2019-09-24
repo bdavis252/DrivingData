@@ -5,12 +5,7 @@ VisualStudioVersion = 15.0.28307.757
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DrivingData", "DrivingData\DrivingData.csproj", "{8282BDDC-EDFD-49D5-BED4-C2732832F30A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{4D7AB2AC-85B4-4D64-9E43-115FEC4DDC4B}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TextFiles", "TextFiles", "{D35C19FE-C396-4D7A-9C40-5BDF09A4D007}"
-	ProjectSection(SolutionItems) = preProject
-		ExampleFromRoot.txt = ExampleFromRoot.txt
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{4D7AB2AC-85B4-4D64-9E43-115FEC4DDC4B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
