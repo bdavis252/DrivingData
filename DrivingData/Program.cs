@@ -10,16 +10,23 @@ namespace DrivingData
             // As both of the bottom ones depend on the same instance of the top, for now, meh.
             var udcs = new UserDataCollectionService();
             var rs = new ReportService(udcs);
-            var ts = new TextFileService(udcs);
-
-            Console.WriteLine("Hello World!");
+            var tfs = new TextFileService(udcs);
 
             //if args < 1 abort
-            //else use args to get filename
-
-            //feed file name to text service.
+            if (args.Length == 0)
+            {
+                Console.WriteLine("Please provide a filename as an argument to this program.");
+            }
+            else
+            {
+                foreach (var filename in args)
+                {
+                    tfs.ReadAndProcessTextFile(filename);
+                }
+                Console.Write(rs.GenerateReport());
+            }
             
-            Console.ReadLine(); //keep window open until enter pressed to see output
+            Console.ReadKey(); //keep window open until enter pressed to see output
         }
     }
 }
