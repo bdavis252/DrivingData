@@ -32,10 +32,14 @@ namespace DrivingData
                 // "rounded to the nearest 32-bit signed integer. If value is halfway between two whole numbers, 
                 // the even number is returned; that is, 4.5 is converted to 4, and 5.5 is converted to 6."
                 var miles = Convert.ToInt32(summary.Value.TotalDistance);
-                var mph = Convert.ToInt32(summary.Value.TotalDistance / (summary.Value.TotalMinutes/60M));
+                sb.AppendFormat("{0}: {1} miles", summary.Value.DriverName, miles);
 
-                sb.AppendFormat("{0}: {1} miles @ {2} mph", summary.Value.DriverName, miles, mph);
-
+                //dividing by 0 is cool, but...
+                if (summary.Value.TotalMinutes > 0)
+                {
+                    sb.AppendFormat(" @ {0} mph", Convert.ToInt32(summary.Value.TotalDistance / (summary.Value.TotalMinutes / 60M)));
+                }
+                
                 //new lines except at the end
                 if (summary.Index < count-1)
                 {

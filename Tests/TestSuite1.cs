@@ -86,9 +86,15 @@ namespace Tests
             Assert.IsTrue(list.Exists(x => x.DriverName == "Dan" && x.TotalDistance == 17.3M && x.TotalMinutes == 30));
         }
 
-        //TODO test the discard of < 5 or > 100
+        [TestMethod]
+        public void TestCaseWhenDriverWithNoTrips()
+        {
+            tfs.ReadAndProcessTextFile("ExampleTextFiles/ExampleFromRoot.txt");
 
-        //TODO handle the case when there is a driver with no trips (print the 0)
+            Assert.AreEqual("Lauren: 42 miles @ 34 mph\r\nDan: 39 miles @ 47 mph\r\nKumi: 0 miles", rs.GenerateReport());
+        }
+
+        //TODO test the discard of < 5 or > 100
 
         //TODO what about duplicate driver registrations
         //TODO make a test to handle input for ppl that aren't registered?

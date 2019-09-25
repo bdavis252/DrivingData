@@ -43,12 +43,24 @@ namespace DrivingData
         {
             //TODO discard < 5 and > 100
 
-            return AllTrips.GroupBy(t => t.DriverName).Select(g => new DriverTripSummary()
+            var nonzeroSummaries = AllTrips.GroupBy(t => t.DriverName).Select(g => new DriverTripSummary()
             {
                 DriverName = g.Key,
                 TotalDistance = g.Sum(t => t.MilesDriven),
                 TotalMinutes = Convert.ToInt32(g.Sum(t => t.EndTime.Subtract(t.StartTime).TotalMinutes)) // convert the sum rather than each item
-            }).OrderByDescending(dts => dts.TotalDistance);
+            });
+
+            //This is a little strange because strings aren't unique; would be much better to do this with Ids. See comment in Driver class
+            var usersWithNoTrips = AllRegisteredDrivers.Select(x => x.Name).Except(nonzeroSummaries.Select(y => y.DriverName));
+            var summariesForUsersWithNoTrips = usersWithNoTrips.Select(u => new DriverTripSummary()
+            {
+                DriverName = u // other fields will default to 0
+            });
+
+            return nonzeroSummaries
+                .Concat(summariesForUsersWithNoTrips)
+                .OrderByDescending(dts => dts.TotalDistance)
+                .ThenBy(dts => dts.DriverName);
         }
     }
 }
