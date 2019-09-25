@@ -18,7 +18,7 @@ namespace DrivingData
             AllTrips = new List<Trip>();
         }
 
-        //TODO case if driver does not exist
+        //TODO case if driver already exists
         public void RegisterDriver(string driverName)
         {
             AllRegisteredDrivers.Add(new Driver(driverName));
@@ -41,8 +41,6 @@ namespace DrivingData
 
         public IOrderedEnumerable<DriverTripSummary> GetDriverTripSummaries()
         {
-            //TODO discard < 5 and > 100
-
             var nonzeroSummaries = AllTrips.GroupBy(t => t.DriverName).Select(g => new DriverTripSummary()
             {
                 DriverName = g.Key,
