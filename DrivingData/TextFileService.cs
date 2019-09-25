@@ -25,17 +25,25 @@ namespace DrivingData
         {
             //TODO fail gracefully?
             string[] lines = File.ReadAllLines(filename);
+            int i = 0;
             foreach (var line in lines)
             {
-                if (line.StartsWith("Driver "))
+                i++;
+                try
                 {
-                    ProcessDriverCommand(line);
+                    if (line.StartsWith("Driver "))
+                    {
+                        ProcessDriverCommand(line);
+                    }
+                    else if (line.StartsWith("Trip "))
+                    {
+                        ProcessTripCommand(line);
+                    }
                 }
-                else if(line.StartsWith("Trip "))
+                catch (Exception e)
                 {
-                    ProcessTripCommand(line);
+                    throw new Exception("Failure on line " + i + " of text file.", e);
                 }
-                //TODO else fail gracefully?
             }
         }
 

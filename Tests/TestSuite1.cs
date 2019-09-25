@@ -106,7 +106,5 @@ namespace Tests
         //TODO what about duplicate driver registrations
         //TODO make a test to handle input for ppl that aren't registered?
         //TODO make a test to handle junk time/distance inputs?
-
-        //TODO way later test 24 hr input in text file?
     }
 }
