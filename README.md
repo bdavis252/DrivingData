@@ -13,3 +13,7 @@ I'm going to start with the report. I'm going to make the data structure and har
 Also, I'm thinking of architecting this thing in the way I am because, while this is an exercise, in real life, you really are going to have some service that "registers drivers" and then a service that feeds trip data by driver. The report would pull from a database instead of text file but in the end I'm still going to end up with a service that consumes a list of trip data and produces a report. So I'm going to structure it more like a web API even though I'm writing it as a console app for convenience. 
 
 Not going to be sadistic and output a finely-formatted PDF ... Probably.
+
+So far the program has gone relatively smoothly. As I refactored the app to have multiple services, I had to decide whether to unit test each method or just the public-facing ones. In the end I decided that there wasn't much use testing a method that effectively just puts something on a list and so just did the public-facing ones. I also see that to filter the miles per hour I need a little refactor, because I was previously calculating mph on the Trip Summary but to get rid of airplane trips and walking, I need to filter on the Trip level rather than the Summary level. 
+
+
