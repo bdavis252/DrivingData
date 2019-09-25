@@ -30,7 +30,7 @@ namespace DrivingData
                 int mph = Convert.ToInt32(summary.Value.GetMph());
                 if (mph > 0)
                 {
-                    sb.AppendFormat(" @ {0} mph", mph));
+                    sb.AppendFormat(" @ {0} mph", mph);
                 }
                 
                 //new lines except at the end

@@ -64,11 +64,19 @@ namespace DrivingData
                 var startTime = DateTime.ParseExact(timeAndDistanceStrings[1], "HH:mm", CultureInfo.InvariantCulture);
                 var endTime = DateTime.ParseExact(timeAndDistanceStrings[2], "HH:mm", CultureInfo.InvariantCulture);
                 var distance = decimal.Parse(timeAndDistanceStrings[3]);
-                
-                // Discard any trips that average a speed of less than 5 mph or greater than 100 mph.
-                //TODO discard < 5 and > 100)
 
-                udcs.RegisterTrip(driver, startTime, endTime, distance);
+                var trip = new Trip(driver, startTime, endTime, distance);
+
+                // Discard any trips that average a speed of less than 5 mph or greater than 100 mph.
+                var mph = trip.GetRoundedMph();
+                if (mph < 5 || mph > 100)
+                {
+                    //For now, just discard. Later we may want to log it or something.
+                }
+                else
+                {
+                    udcs.RegisterTrip(driver, startTime, endTime, distance);
+                }
             }
             catch (Exception e)
             {

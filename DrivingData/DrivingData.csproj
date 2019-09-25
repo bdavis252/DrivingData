@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ExampleTextFiles\SlowTripsAndFastTrips.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ExampleTextFiles\SlowTripsAndFastTrips.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="ExampleTextFiles\ExampleFromRoot.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -94,8 +94,15 @@ namespace Tests
             Assert.AreEqual("Lauren: 42 miles @ 34 mph\r\nDan: 39 miles @ 47 mph\r\nKumi: 0 miles", rs.GenerateReport());
         }
 
-        //TODO test the discard of < 5 or > 100
+        [TestMethod]
+        public void TestCaseSkipWalkingAndAirplanes()
+        {
+            //Keep Lauren's the same, but skip Dan.
+            tfs.ReadAndProcessTextFile("ExampleTextFiles/SlowTripsAndFastTrips.txt");
 
+            Assert.AreEqual("Lauren: 42 miles @ 34 mph\r\nDan: 0 miles\r\nKumi: 0 miles", rs.GenerateReport());
+        }
+        
         //TODO what about duplicate driver registrations
         //TODO make a test to handle input for ppl that aren't registered?
         //TODO make a test to handle junk time/distance inputs?

@@ -21,7 +21,7 @@ namespace DrivingData
         //TODO case if driver already exists
         public void RegisterDriver(string driverName)
         {
-            AllRegisteredDrivers.Add(new Driver(driverName));
+            RegisterDriver(new Driver(driverName));
         }
         public void RegisterDriver(Driver d)
         {
@@ -30,13 +30,12 @@ namespace DrivingData
 
         public void RegisterTrip(Driver d, DateTime startTime, DateTime endTime, decimal milesDriven)
         {
-            AllTrips.Add(new Trip()
-            {
-                DriverName = d.Name,
-                StartTime = startTime,
-                EndTime = endTime,
-                MilesDriven = milesDriven
-            });
+            RegisterTrip(new Trip(d.Name, startTime, endTime, milesDriven));
+        }
+
+        public void RegisterTrip(Trip t)
+        {
+            AllTrips.Add(t);
         }
 
         public IOrderedEnumerable<DriverTripSummary> GetDriverTripSummaries()
@@ -46,6 +45,9 @@ namespace DrivingData
                 DriverName = g.Key,
                 TotalDistance = g.Sum(t => t.MilesDriven),
                 TotalMinutes = Convert.ToInt32(g.Sum(t => t.EndTime.Subtract(t.StartTime).TotalMinutes)) // convert the sum rather than each item
+                //Note that the elapsed time is calculated here and in Trip.cs. They should probably get moved/abstracted but the 
+                //function is essentially just .Subtract and the liklihood of needing to change it is slim. I'm going to rule that the
+                //performance gain here is pragmatically worth the loss of DRY and just leave this comment if it ever matters.
             });
 
             //This is a little strange because strings aren't unique; would be much better to do this with Ids. See comment in Driver class
