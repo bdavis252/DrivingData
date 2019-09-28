@@ -10,10 +10,12 @@ namespace DrivingData
     // So this isn't a real web API but if it were these would be service endpoints
     public class TextFileService
     {
+        private BusinessService bs;
         private UserDataCollectionService udcs;
 
-        public TextFileService(UserDataCollectionService udcs)
+        public TextFileService(BusinessService bs, UserDataCollectionService udcs)
         {
+            this.bs = bs;
             this.udcs = udcs;
         }
 
@@ -76,7 +78,7 @@ namespace DrivingData
                 var trip = new Trip(driver, startTime, endTime, distance);
 
                 // Discard any trips that average a speed of less than 5 mph or greater than 100 mph.
-                var mph = trip.GetRoundedMph();
+                var mph = bs.GetRoundedMph(trip.MilesDriven, trip.GetMinutesElapsed());
                 if (mph < 5 || mph > 100)
                 {
                     //For now, just discard. Later we may want to log it or something.

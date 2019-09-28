@@ -10,6 +10,7 @@ namespace Tests
     [TestClass]
     public class TestSuite1
     {
+        BusinessService bs;
         ReportService rs;
         TextFileService tfs;
         UserDataCollectionService udcs;
@@ -18,10 +19,10 @@ namespace Tests
         public void Init()
         {
             // This will work for now but really ought to have DI/IoC.
-            // As both of the bottom ones depend on the same instance of the top, for now, meh.
+            bs = new BusinessService();
             udcs = new UserDataCollectionService();
-            rs = new ReportService(udcs);
-            tfs = new TextFileService(udcs);
+            rs = new ReportService(bs, udcs);
+            tfs = new TextFileService(bs, udcs);
         }
 
         [TestMethod]
@@ -39,6 +40,8 @@ namespace Tests
         [TestMethod]
         public void TestReportSortsWithHardcodedData()
         {
+            // Driver Dan
+            // Driver Lauren
             // Trip Dan 07:15 07:45 17.3
             // Trip Dan 06:12 06:32 21.8
             // Trip Lauren 12:01 13:16 42.0

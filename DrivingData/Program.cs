@@ -7,10 +7,10 @@ namespace DrivingData
         static void Main(string[] args)
         {
             // This will work for now but really ought to have DI/IoC.
-            // As both of the bottom ones depend on the same instance of the top, for now, meh.
+            var bs = new BusinessService();
             var udcs = new UserDataCollectionService();
-            var rs = new ReportService(udcs);
-            var tfs = new TextFileService(udcs);
+            var rs = new ReportService(bs, udcs);
+            var tfs = new TextFileService(bs, udcs);
 
             //if args < 1 abort
             if (args.Length == 0)
