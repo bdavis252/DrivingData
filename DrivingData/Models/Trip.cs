@@ -23,10 +23,5 @@ namespace DrivingData.Models
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public decimal MilesDriven { get; set; }
-
-        public int GetMinutesElapsed()
-        {
-            return Convert.ToInt32(EndTime.Subtract(StartTime).TotalMinutes);
-        }
     }
 }

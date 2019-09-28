@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DrivingData.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,6 +10,11 @@ namespace DrivingData
     //I'd probably pull it out to be its own project and make it a dependency of other projects that would need it.
     public class BusinessService
     {
+        public int GetMinutesElapsed(Trip t)
+        {
+            return Convert.ToInt32(t.EndTime.Subtract(t.StartTime).TotalMinutes);
+        }
+
         internal decimal GetMph(decimal distance, decimal minutes)
         {
             //dividing by 0 is cool, but...

@@ -10,12 +10,10 @@ namespace DrivingData
     // So this isn't a real web API but if it were these would be service endpoints
     public class TextFileService
     {
-        private BusinessService bs;
         private UserDataCollectionService udcs;
 
-        public TextFileService(BusinessService bs, UserDataCollectionService udcs)
+        public TextFileService(UserDataCollectionService udcs)
         {
-            this.bs = bs;
             this.udcs = udcs;
         }
 
@@ -35,7 +33,7 @@ namespace DrivingData
                 {
                     if (line.StartsWith("Driver "))
                     {
-                        ProcessDriverCommand(line);
+                        ParseDriverCommand(line);
                     }
                     else if (line.StartsWith("Trip "))
                     {
@@ -50,16 +48,16 @@ namespace DrivingData
         }
 
         /// <summary>
-        /// Parses driver command. Persists the driver.
+        /// Parses driver command. "Persists" the driver.
         /// </summary>
         /// <param name="command">The command (e.g. Driver Dan)</param>
-        public void ProcessDriverCommand(string command)
+        public void ParseDriverCommand(string command)
         {
-            udcs.RegisterDriver(command.Replace("Driver ", string.Empty));
+            udcs.CheckDriverThenRegister(command.Replace("Driver ", string.Empty));
         }
 
         /// <summary>
-        /// Attempts to parse a trip command, and if the data fits the model, persists the trip.
+        /// Attempts to parse a trip command, and if the data fits the model, "persists" the trip.
         /// </summary>
         /// <param name="command">The command (e.g. Trip Dan 07:15 07:45 17.3)</param>
         public void ProcessTripCommand(string command)
@@ -77,16 +75,7 @@ namespace DrivingData
 
                 var trip = new Trip(driver, startTime, endTime, distance);
 
-                // Discard any trips that average a speed of less than 5 mph or greater than 100 mph.
-                var mph = bs.GetRoundedMph(trip.MilesDriven, trip.GetMinutesElapsed());
-                if (mph < 5 || mph > 100)
-                {
-                    //For now, just discard. Later we may want to log it or something.
-                }
-                else
-                {
-                    udcs.RegisterTrip(driver, startTime, endTime, distance);
-                }
+                udcs.CheckTripThenRegister(driver, startTime, endTime, distance);
             }
             catch (Exception e)
             {

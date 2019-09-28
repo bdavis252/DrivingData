@@ -8,9 +8,9 @@ namespace DrivingData
         {
             // This will work for now but really ought to have DI/IoC.
             var bs = new BusinessService();
-            var udcs = new UserDataCollectionService();
+            var udcs = new UserDataCollectionService(bs);
             var rs = new ReportService(bs, udcs);
-            var tfs = new TextFileService(bs, udcs);
+            var tfs = new TextFileService(udcs);
 
             //if args < 1 abort
             if (args.Length == 0)

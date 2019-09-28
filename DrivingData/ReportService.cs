@@ -9,7 +9,7 @@ namespace DrivingData
     // So this isn't a real web API but if it were these would be service endpoints
     public class ReportService
     {
-        private BusinessService bs; //ha ha
+        private BusinessService bs;
         private UserDataCollectionService udcs;
 
         public ReportService(BusinessService bs, UserDataCollectionService udcs)

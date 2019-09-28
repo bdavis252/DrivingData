@@ -10,30 +10,71 @@ namespace DrivingData
     // So this isn't a real web API but if it were these would be service endpoints
     public class UserDataCollectionService
     {
+        private BusinessService bs;
+
         public List<Driver> AllRegisteredDrivers { get; private set; }
         private List<Trip> AllTrips { get; set; }
-        public UserDataCollectionService()
+
+        public UserDataCollectionService(BusinessService bs)
         {
+            this.bs = bs;
             AllRegisteredDrivers = new List<Driver>();
             AllTrips = new List<Trip>();
         }
 
-        //TODO case if driver already exists
-        public void RegisterDriver(string driverName)
+        /// <summary>
+        /// Run any checks to see if driver can be registered, then registers them if needed.
+        /// </summary>
+        /// <param name="driverName"></param>
+        public void CheckDriverThenRegister(string driverName)
         {
-            RegisterDriver(new Driver(driverName));
+            CheckDriverThenRegister(new Driver(driverName));
         }
-        public void RegisterDriver(Driver d)
+        public void CheckDriverThenRegister(Driver d)
+        {
+            //TODO handle case if driver already exists - YAGNI for now
+
+            //If all the checks check out,
+            ActuallyRegisterDriver(d);
+        }
+
+        /// <summary>
+        /// This actually persists the driver in the database. 
+        /// </summary>
+        /// <param name="d">A vetted, bona fide new driver</param>
+        private void ActuallyRegisterDriver(Driver d)
         {
             AllRegisteredDrivers.Add(d);
         }
 
-        public void RegisterTrip(Driver d, DateTime startTime, DateTime endTime, decimal milesDriven)
+        /// <summary>
+        /// Run any checks to see if trip can be registered, then registers it if needed.
+        /// </summary>
+        /// <param name="d"></param>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <param name="milesDriven"></param>
+        public void CheckTripThenRegister(Driver d, DateTime startTime, DateTime endTime, decimal milesDriven)
         {
-            RegisterTrip(new Trip(d.Name, startTime, endTime, milesDriven));
+            CheckTripThenRegister(new Trip(d.Name, startTime, endTime, milesDriven));
         }
 
-        public void RegisterTrip(Trip t)
+        public void CheckTripThenRegister(Trip t)
+        {
+            // Discard any trips that average a speed of less than 5 mph or greater than 100 mph.
+            var mph = bs.GetRoundedMph(t.MilesDriven, bs.GetMinutesElapsed(t));
+            if (mph < 5 || mph > 100)
+            {
+                //For now, just discard. Later we may want to log it or something.
+            }
+            else
+            {
+                ActuallyRegisterTrip(t);
+            }
+        }
+
+
+        private void ActuallyRegisterTrip(Trip t)
         {
             AllTrips.Add(t);
         }
@@ -44,10 +85,7 @@ namespace DrivingData
             {
                 DriverName = g.Key,
                 TotalDistance = g.Sum(t => t.MilesDriven),
-                TotalMinutes = Convert.ToInt32(g.Sum(t => t.EndTime.Subtract(t.StartTime).TotalMinutes)) // convert the sum rather than each item
-                //Note that the elapsed time is calculated here and in Trip.cs. They should probably get moved/abstracted but the 
-                //function is essentially just .Subtract and the liklihood of needing to change it is slim. I'm going to rule that the
-                //performance gain here is pragmatically worth the loss of DRY and just leave this comment if it ever matters.
+                TotalMinutes = Convert.ToInt32(g.Sum(t => bs.GetMinutesElapsed(t))) // convert the sum rather than each item
             });
 
             //This is a little strange because strings aren't unique; would be much better to do this with Ids. See comment in Driver class
