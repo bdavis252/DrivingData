@@ -6,10 +6,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ExampleTextFiles\EdgeCase1.txt" />
+    <None Remove="ExampleTextFiles\EdgeCase2.txt" />
+    <None Remove="ExampleTextFiles\EdgeCase3.txt" />
     <None Remove="ExampleTextFiles\SlowTripsAndFastTrips.txt" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="ExampleTextFiles\EdgeCase1.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExampleTextFiles\EdgeCase2.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExampleTextFiles\EdgeCase3.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="ExampleTextFiles\SlowTripsAndFastTrips.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

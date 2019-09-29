@@ -26,6 +26,26 @@ namespace Tests
         }
 
         [TestMethod]
+        public void TestDriverRegistration()
+        {
+            var human = new Driver("HumanBeing");
+            udcs.CheckDriverThenRegister(human);
+
+            Assert.IsTrue(udcs.AllRegisteredDrivers.Contains(human));
+        }
+
+        // YAGNI for this test but...
+        //[TestMethod]
+        //public void TestDoubleRegistration()
+        //{
+        //    var human = new Driver("HumanBeing");
+        //    udcs.CheckDriverThenRegister(human);
+        //    udcs.CheckDriverThenRegister(human);
+
+        //    Assert.AreEqual(udcs.AllRegisteredDrivers.Count(), 1);
+        //}
+
+        [TestMethod]
         public void TestReportWithHardcodedData()
         {
             var human = new Driver("HumanBeing");
@@ -38,7 +58,7 @@ namespace Tests
         }
 
         [TestMethod]
-        public void TestReportSortsWithHardcodedData()
+        public void TestReportSortsByDistance()
         {
             // Driver Dan
             // Driver Lauren
@@ -55,6 +75,7 @@ namespace Tests
             udcs.CheckTripThenRegister(dan, new DateTime(2019, 1, 1, 6, 12, 0), new DateTime(2019, 1, 1, 6, 32, 0), 21.8M);
             udcs.CheckTripThenRegister(lauren, new DateTime(2019, 1, 1, 12, 01, 0), new DateTime(2019, 1, 1, 13, 16, 0), 42);
             
+            //Lauren comes first even though Dan entered first
             Assert.AreEqual("Lauren: 42 miles @ 34 mph\r\nDan: 39 miles @ 47 mph", rs.GenerateReport());
         }
 
@@ -73,6 +94,17 @@ namespace Tests
             var list = udcs.GetDriverTripSummaries().ToList();
             Assert.IsTrue(list.Exists(x => x.DriverName == "Dan" && x.TotalDistance == 17.3M && x.TotalMinutes == 30));
         }
+
+        // I would definitely write several tests like the following, if the problem statement didn't guarantee good input
+        // "The line will be space delimited with the following fields: the command (Trip), driver name, start time, stop time, miles driven."
+        //[TestMethod]
+        //public void TestProgramDealsWithMalformedInput()
+        //{
+        //    udcs.CheckDriverThenRegister("Dan");
+        //    tfs.ProcessTripCommand("Trip Dan 07:15 17.3");
+        //    var list = udcs.GetDriverTripSummaries().ToList();
+        //    Assert.IsTrue(list.Exists(x => x.DriverName == "Dan" && x.TotalDistance == 17.3M && x.TotalMinutes == 30));
+        //}
 
         [TestMethod]
         public void TestReadingFileWithSingleDriverCommand()
@@ -100,14 +132,54 @@ namespace Tests
         [TestMethod]
         public void TestCaseSkipWalkingAndAirplanes()
         {
-            //Keep Lauren's the same, but skip Dan.
+            //Keep Lauren's the same from the Root Example, but skip Dan.
             tfs.ReadAndProcessTextFile("ExampleTextFiles/SlowTripsAndFastTrips.txt");
 
             Assert.AreEqual("Lauren: 42 miles @ 34 mph\r\nDan: 0 miles\r\nKumi: 0 miles", rs.GenerateReport());
         }
+
+        [TestMethod]
+        public void TestEdgeCase1()
+        {
+            //Tests that it can read all the way from midnight to midnight
+            tfs.ReadAndProcessTextFile("ExampleTextFiles/EdgeCase1.txt");
+
+            Assert.AreEqual("Dan: 1200 miles @ 50 mph", rs.GenerateReport());
+        }
+
+        [TestMethod]
+        public void TestEdgeCase2()
+        {
+            //Tests that it can read something with literally 0 distance travelled
+            tfs.ReadAndProcessTextFile("ExampleTextFiles/EdgeCase2.txt");
+
+            Assert.AreEqual("Dan: 0 miles", rs.GenerateReport());
+        }
+
+        //This would need more direction to deal with it. 
+        //- I could see the argument for just registering the driver if a trip is processed for an unregistered driver. 
+        //- However, it could be that if they're not registered they don't have an access token so they'd get 401'd.
+        //- Or the app just wouldn't let them submit until they registered.
+        //Since "If the problem statement doesn't specify something, you can make any decision that you want," I'm going to 
+        //rule serious error handling beyond the scope of this project.
+        //[TestMethod]
+        //public void TestEdgeCase3()
+        //{
+        //    //TODO handle input for ppl that aren't registered
+        //    tfs.ReadAndProcessTextFile("ExampleTextFiles/EdgeCase3.txt");
+
+        //    Assert.AreEqual("Trip submitted for unregistered driver.", rs.GenerateReport());
+        //}
+
+        //Also, I thought of this while testing and would ask up to see if whoever consumes the report would want this
+        //[TestMethod]
+        //public void TestReportDropsMilesForUnitaryMile()
+        //{
+        //    //Tests that it can read something with literally 0 distance travelled
+        //    tfs.ReadAndProcessTextFile("ExampleTextFiles/TextServiceCheck.txt");
+
+        //    Assert.AreEqual("Dan: 1 mile", rs.GenerateReport());
+        //}
         
-        //TODO what about duplicate driver registrations
-        //TODO make a test to handle input for ppl that aren't registered?
-        //TODO make a test to handle junk time/distance inputs?
     }
 }

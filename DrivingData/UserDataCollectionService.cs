@@ -61,6 +61,8 @@ namespace DrivingData
 
         public void CheckTripThenRegister(Trip t)
         {
+            // TODO would want to test if someone is registered first.
+
             // Discard any trips that average a speed of less than 5 mph or greater than 100 mph.
             var mph = bs.GetRoundedMph(t.MilesDriven, bs.GetMinutesElapsed(t));
             if (mph < 5 || mph > 100)
@@ -79,7 +81,7 @@ namespace DrivingData
             AllTrips.Add(t);
         }
 
-        public IOrderedEnumerable<DriverTripSummary> GetDriverTripSummaries()
+        public IEnumerable<DriverTripSummary> GetDriverTripSummaries()
         {
             var nonzeroSummaries = AllTrips.GroupBy(t => t.DriverName).Select(g => new DriverTripSummary()
             {
@@ -94,11 +96,8 @@ namespace DrivingData
             {
                 DriverName = u // other fields will default to 0
             });
-
-            return nonzeroSummaries
-                .Concat(summariesForUsersWithNoTrips)
-                .OrderByDescending(dts => dts.TotalDistance)
-                .ThenBy(dts => dts.DriverName);
+            
+            return nonzeroSummaries.Concat(summariesForUsersWithNoTrips);
         }
     }
 }

@@ -20,7 +20,9 @@ namespace DrivingData
 
         public string GenerateReport()
         {
-            var driverTripSummaries = udcs.GetDriverTripSummaries(); 
+            var driverTripSummaries = udcs.GetDriverTripSummaries()
+                .OrderByDescending(dts => dts.TotalDistance)
+                .ThenBy(dts => dts.DriverName);
             
             //Generate Report
             var sb = new StringBuilder();
