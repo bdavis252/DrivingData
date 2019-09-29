@@ -16,4 +16,11 @@ Not going to be sadistic and output a finely-formatted PDF ... Probably.
 
 So far the program has gone relatively smoothly. As I refactored the app to have multiple services, I had to decide whether to unit test each method or just the public-facing ones. In the end I decided that there wasn't much use testing a method that effectively just puts something on a list and so just did the public-facing ones. I also see that to filter the miles per hour I need a little refactor, because I was previously calculating mph on the Trip Summary but to get rid of airplane trips and walking, I need to filter on the Trip level rather than the Summary level. 
 
+Life got in the way of getting this done in a timely manner but because I looked at this with a fresh set of eyes I realized today that I had a few things mixed up. There were a couple duplicate lines I needed to abstract to a service, and then I realized some things depended on others in a way that wasn't really solid. So I cleaned those up real quick, stopped my kids from fighting, almost finished it up, bedtime, ok now it's ready. The UserDataCollectionService would be a candidate for also splitting up into something that manages data intake and something that retrieves sensible sets of data but I think for the scope of this project that would be going "Overboard" which the problem statement suggested we not do.
 
+So anyway, to run it, you'd just cd into the bin/win10 directory and do, e.g.
+DrivingData.exe ExampleTextFiles/ExampleFromRoot.txt
+or you if you prefer Linux, go to bin/ubuntu
+DrivingData ExampleTextFiles/ExampleFromRoot.txt
+
+I built for two common platforms because Tim suggested file size was a better priority over a self-contained package. The files I am sending depend on having .net but, since it's written in .net core, if needed I can build it to include the .net libraries it needs, it'll just be 60MB or so.
